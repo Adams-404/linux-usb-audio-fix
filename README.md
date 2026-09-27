@@ -110,9 +110,9 @@ If you prefer applying the fix manually without running the script:
    ```
 2. Create `/etc/modprobe.d/usb-audio-quirk.conf`:
    ```bash
-   sudo sh -c 'echo "options snd-usb-audio quirk_flags=12d1:3a06:MIXER_GET_CUR_BROKEN" > /etc/modprobe.d/usb-audio-quirk.conf'
+   sudo sh -c 'echo "options snd-usb-audio quirk_flags=12d1:3a06:0x40000000" > /etc/modprobe.d/usb-audio-quirk.conf'
    ```
-   *(Replace `12d1:3a06` with your actual device IDs).*
+   *(Replace `12d1:3a06` with your actual device IDs; `0x40000000` is the hex bitmask for `MIXER_GET_CUR_BROKEN`).*
 3. Unplug and replug your earphones (or re-authorize the USB port via sysfs).
 4. Unmute and set your volume in your audio mixer settings.
 
