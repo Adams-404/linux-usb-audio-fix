@@ -59,6 +59,7 @@ usage() {
     echo "  -y, --yes            Automatically apply fixes without prompting for confirmation"
     echo "  -r, --revert         Remove applied audio quirks and restore system default settings"
     echo "  -d, --device VID:PID Manually specify target USB device VID:PID (e.g. 12d1:3a06)"
+    echo "      --install        Install 'usb-audio-fix' globally into /usr/local/bin"
     echo "  -v, --verbose        Show detailed diagnostic and debugging output"
     echo "  -h, --help           Display this help message and exit"
     echo ""
@@ -427,6 +428,16 @@ EOF"
     echo "   $0 --revert"
 }
 
+do_install() {
+    print_banner
+    log_info "Installing usb-audio-fix to /usr/local/bin..."
+    ensure_sudo
+    sudo cp "$0" /usr/local/bin/usb-audio-fix
+    sudo chmod +x /usr/local/bin/usb-audio-fix
+    echo ""
+    log_ok "Installation successful! You can now run ${BOLD}usb-audio-fix${NC} directly from any terminal."
+}
+
 # Parse Command Line Options
 while [ $# -gt 0 ]; do
     case "$1" in
@@ -450,6 +461,10 @@ while [ $# -gt 0 ]; do
             MANUAL_DEV="$2"
             shift 2
             ;;
+        --install)
+            MODE="install"
+            shift
+            ;;
         -v|--verbose)
             VERBOSE=true
             shift
@@ -466,7 +481,8 @@ while [ $# -gt 0 ]; do
 done
 
 case "$MODE" in
-    check)  do_check ;;
-    revert) do_revert ;;
-    fix)    do_fix ;;
+    check)   do_check ;;
+    revert)  do_revert ;;
+    install) do_install ;;
+    fix)     do_fix ;;
 esac
